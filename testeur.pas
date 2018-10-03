@@ -64,7 +64,14 @@ BEGIN
 	for i := 1 to 10 do
 	begin
 
-	if ((MilliSecondsBetween(Now, deb) - 300) < tab[i].temps) and (tab[i].temps < (MilliSecondsBetween(Now, deb) + 300)) then
+
+	if ((tab[i].temps - 300) > MilliSecondsBetween(Now, deb)) and ((tab[i].temps - 500) < MilliSecondsBetween(Now, deb)) then
+		begin
+		TextColor(Yellow);
+		GotoXY(tab[i].posX,1);
+		write(tab[i].key);
+		end
+	else if (tab[i].temps - 300 < MilliSecondsBetween(Now, deb)) and ((tab[i].temps + 300) > MilliSecondsBetween(Now, deb) + 300) then
 		begin
 		TextColor(Green);
 		GotoXY(tab[i].posX,1);
