@@ -1,3 +1,4 @@
+
 unit IGRTypes;
 
 Interface
@@ -21,10 +22,3 @@ implementation
 
 
 end.
-
-
-
-
-
-
-

@@ -31,17 +31,17 @@ begin
 		end;
 	close(ficMusniv);
 		
-	writeln ('quel musique voulez-vous?');
+	writeln('quel musique voulez-vous?');
 	readln (musique);
 	
-	writeln ('vous avez choisie la musique ', musique);
+	writeln('vous avez choisie la musique ', musique);
 end;
 
 {nom utilisateur}
 procedure nomUser (var nom : String);
 begin
-	writeln ('quel est votre nom?');
-	readln (nom);
+	writeln('quel est votre nom?');
+	readln(nom);
 end;
 
 {si 10 * bonne touvhe b=2 si 15 bonne touches b=3 si 20 bonnes touches b=4}
@@ -54,7 +54,7 @@ begin
 		else compteur := 0;
 	case compteur of 
 		10 : b := 2;
-		15 : b :=3;
+		15 : b := 3;
 		20 : b := 4;
 	
 	bonus := b

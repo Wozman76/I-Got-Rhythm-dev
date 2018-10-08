@@ -1,6 +1,6 @@
 program testeur;
 
-uses IGRTypes, crt, sysutils, DateUtils;
+uses IGRTypes, crt, sysutils, DateUtils, keyboard, unix;
 
 
 
@@ -29,6 +29,30 @@ end;
 
 
 
+procedure afficherInterface();
+var i : Word;
+begin
+	for i := 1 to 17 do
+		begin
+			GotoXY(28,i);
+			write('|   |   |   |   |   |');
+	
+		end;
+		
+
+	
+	
+	GotoXY(1,18);
+	write('--------------------------------------------------------------------------------');
+
+	GotoXY(28, 19);
+	write('| C | V | B | N | ? |');
+	GotoXY(28,21);
+	write('| S   P   A   C   E |');
+end;
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,23 +61,49 @@ end;
 var tab : TabMusic;
 	deb : TDateTime;
 	i : Word;
+	
+	keyPressed : TKeyEvent;
 
 	
 
 BEGIN
+
+	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
+	
 	
 	initTab('song1',tab);
-
+	afficherInterface;
 
 	deb := Now;
 	
+	
 
 
 
-	GotoXY(1,20);
-	write('--------------------------------------------');
 
-	tab[1].posY := 2;
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	{while True do
+	begin
+		keyPressed := GetKeyEvent;
+		writeln(GetKeyEventCode(keyPressed));
+	end;}
+
+	
+	
+
+	{tab[1].posY := 2;
 
 	
 	
@@ -83,24 +133,27 @@ BEGIN
 		GotoXY(tab[i].posX,1);
 		write(tab[i].key);	
 		end;
-	end;
+	end;}
+	
+	tab[1].posX := 30;
+	tab[1].posY := 2;
+	delay(1500);
+	while MilliSecondsBetween(Now, deb) < 1500 do
+	delay(15);
 	
 	
-	{while MilliSecondsBetween(Now, deb) < 5000 do;
-	
-	
-	while tab[1].posY <= 20 do
+	while tab[1].posY <= 18 do
 	begin
 		GotoXY(tab[1].posX, tab[1].posY - 1);
 		write(' ');
 		GotoXY(tab[1].posX, tab[1].posY);
-		write(tab[1].key);
+		write('=');
 
 		
 		tab[1].posY := tab[1].posY + 1;
 		sleep(100);
 		
-	end;}
+	end;
 
 
 
