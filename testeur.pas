@@ -72,7 +72,7 @@ end;
 
 var tab : TabMusic;
 	deb : TDateTime;
-	i : Word;
+	i, N : Word;
 	
 	keyPressed : TKeyEvent;
 	music: pMIX_MUSIC=NIL;
@@ -85,7 +85,7 @@ BEGIN
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
 	{$endif}
 	
-	son(music);
+	///son(music);
 	initTab('song1',tab);
 	afficherInterface;
 
@@ -150,25 +150,48 @@ BEGIN
 		end;
 	end;}
 	
-	tab[1].posX := 30;
-	tab[1].posY := 2;
-	delay(1500);
-	while MilliSecondsBetween(Now, deb) < 1500 do
-	delay(15);
 	
-	
-	while tab[1].posY <= 18 do
-	begin
-		GotoXY(tab[1].posX, tab[1].posY - 1);
-		write(' ');
-		GotoXY(tab[1].posX, tab[1].posY);
-		write('=');
+	for i := 1 to MAX do
+		begin
+			case tab[i].key of 
+				'c' : tab[i].posX := 30;
+				'v' : tab[i].posX := 34;
+				'b' : tab[i].posX := 38;
+				'n' : tab[i].posX := 42;
+				'?' : tab[i].posX := 46;
+			end;
+			
+			tab[i].posY := 2;
 
 		
-		tab[1].posY := tab[1].posY + 1;
-		sleep(100);
-		
-	end;
+		end;
+	
+	
+	
+	
+	
+
+N := 5;
+while N <= MAX do
+	begin
+		while MilliSecondsBetween(Now, Deb) < tab[N + 1].temps do	
+			for	i := N - 4 to N do
+				///while tab[i].posY <= 18 do
+					begin
+						GotoXY(tab[i].posX, tab[i].posY - 1);
+						write(' ');
+						GotoXY(tab[i].posX, tab[i].posY);
+						write('=');
+			
+					
+						tab[i].posY := tab[i].posY + 1;
+						sleep(50);
+					
+					end;
+		N := N + 1;	
+	end;	
+
+	
 
 
 	MIX_FREEMUSIC(music);

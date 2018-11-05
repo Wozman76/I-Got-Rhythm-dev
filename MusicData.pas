@@ -4,7 +4,7 @@ uses IGRTypes;
 
 
 
-var t : Touche;
+var 
 	fichier : file of Touche;
 	tab, tab2 : TabMusic;
 	i : Word;
@@ -14,34 +14,32 @@ var t : Touche;
 
 BEGIN
 
-	for i := 1 to 10 do
+	for i := 1 to 6 do
 		begin
 			writeln('touche');
 			readln(tab[i].key);
 			writeln('temps');
 			readln(tab[i].temps);
-			writeln('posX');
-			readln(tab[i].posX);
+
 		end;
 
 
 	assign(fichier, 'song1.song');
 	rewrite(fichier);
-	for i := 1 to 10 do
+	for i := 1 to 6 do
 		write(fichier, tab[i]);
 	close(fichier);
 	
 	
 	reset(fichier);
 	
-	for i := 1 to 10 do
+	for i := 1 to 6 do
 		read(fichier, tab2[i]);
 		
-	for i := 1 to 10 do
+	for i := 1 to 6 do
 		begin
 			writeln(tab[i].key);
 			writeln(tab2[i].temps);
-			writeln(tab2[i].posX);
 			writeln;
 		end;
 		
