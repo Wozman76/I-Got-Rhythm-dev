@@ -1,8 +1,11 @@
 program testeur;
 
-uses IGRTypes, crt, sysutils, DateUtils, keyboard, unix;
+uses sdl, sdl_mixer, IGRTypes, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif};
 
-
+CONST 	AUDIO_FREQUENCY:INTEGER=22050;
+		AUDIO_FORMAT:WORD=AUDIO_S16;
+		AUDIO_CHANNELS:INTEGER=2;
+		AUDIO_CHUNKSIZE:INTEGER=4096;
 
 
 
@@ -52,7 +55,16 @@ begin
 end;
 
 
+{Procedure de mise en musique}
+procedure son(var sound : pMIX_MUSIC);
+begin
+    if MIX_OpenAudio(AUDIO_FREQUENCY, AUDIO_FORMAT,AUDIO_CHANNELS, 
+		AUDIO_CHUNKSIZE)<>0 then HALT;
+	sound := MIX_LOADMUS('ressources/Irish_tavern_music.wav');
 
+    MIX_VolumeMusic(MIX_MAX_VOLUME);
+    MIX_PlayMusic(sound, -1);
+end;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,14 +75,17 @@ var tab : TabMusic;
 	i : Word;
 	
 	keyPressed : TKeyEvent;
+	music: pMIX_MUSIC=NIL;
 
 	
 
 BEGIN
-
+	SDL_Init(SDL_INIT_AUDIO);
+	{$ifdef Unix}
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
+	{$endif}
 	
-	
+	son(music);
 	initTab('song1',tab);
 	afficherInterface;
 
@@ -156,6 +171,7 @@ BEGIN
 	end;
 
 
-
+	MIX_FREEMUSIC(music);
+	Mix_CloseAudio();
 
 END.
