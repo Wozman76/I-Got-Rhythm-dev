@@ -25,8 +25,11 @@ end;
 {choix de la difficultée}
 procedure difficulte(var niveau : Integer);
 begin
-	writeln ('quel difficulté voulez-vous? choissisez 1, 2 ou 3');
-	readln (niveau);
+	niveau := 0;
+	Repeat
+		writeln ('quel difficulté voulez-vous? choissisez 1, 2 ou 3');
+		readln (niveau);
+	until (niveau = 1) or (niveau = 2) or (niveau = 3);
 	writeln ('vous avez choisie le niveau ', niveau);
 end;
 
@@ -35,9 +38,11 @@ procedure choixMusique(niveau : Integer ; var musique : String);
 var ficMusniv : Text;
 	mus : String;
 	i : Word;
+	choix : Boolean;
 	music: pMIX_MUSIC=NIL;
 begin
 	i := 0;
+	choix := False;
 	case niveau of 
 		1 : assign(ficMusniv, 'listeFacile.txt');
 		2 : assign(ficMusniv, 'listeMedium.txt');
@@ -52,11 +57,20 @@ begin
 			writeln('- ',i, ' ' + mus);
 		end;
 	close(ficMusniv);
-		
-	writeln('quel musique voulez-vous?');
-	readln (musique);
-	
-	writeln('vous avez choisie la musique ', musique);
+
+	Repeat
+		writeln('quelle musique voulez-vous?');
+		readln (musique);
+		reset(ficMusniv);
+		while not (eof(ficMusniv)) do
+			begin	
+				readln(ficMusniv, mus);
+					if (musique = mus) then
+						choix := true;
+			end;
+		close(ficMusniv);
+	until (choix = true);
+	writeln('vous avez choisi la musique ', musique);
 	
 	
 	
