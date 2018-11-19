@@ -90,7 +90,7 @@ begin
 	readln(nom);
 end;
 
-{si 10 * bonne touvhe b=2 si 15 bonne touches b=3 si 20 bonnes touches b=4}
+{si 10 * bonne touche b=2 si 15 bonne touches b=3 si 20 bonnes touches b=4}
 {function bonus () : Integer;
 var b, compteur: Integer;
 begin

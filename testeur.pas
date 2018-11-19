@@ -25,7 +25,12 @@ begin
 		begin
 			i := i + 1;
 			read(fichier, tab[i]);
+			tab[i].visible := False;
 		end;
+		
+		
+		
+	 
 		
 		
 end;
@@ -71,11 +76,12 @@ end;
 
 
 var tab : TabMusic;
-	deb : TDateTime;
-	i, N : Word;
+	deb,deb1, deb2 : TDateTime;
+	i, minVis, maxVis : Word;
 	
 	keyPressed : TKeyEvent;
 	music: pMIX_MUSIC=NIL;
+	
 
 	
 
@@ -91,7 +97,7 @@ BEGIN
 
 	deb := Now;
 	
-	
+
 
 
 
@@ -165,31 +171,80 @@ BEGIN
 
 		
 		end;
-	
-	
-	
-	
-	
+		
+		
+		
+		
+		
+/////////////////////////////////////	
+minVis := 1;
 
-N := 5;
-while N <= MAX do
+
+
+while not(tab[minVis].visible) do
 	begin
-		while MilliSecondsBetween(Now, Deb) < tab[N + 1].temps do	
-			for	i := N - 4 to N do
-				///while tab[i].posY <= 18 do
-					begin
-						GotoXY(tab[i].posX, tab[i].posY - 1);
-						write(' ');
-						GotoXY(tab[i].posX, tab[i].posY);
-						write('=');
-			
-					
+	if (MilliSecondsBetween(Now, Deb) > tab[minVis].temps - 510) and (MilliSecondsBetween(Now, Deb) < tab[minVis].temps - 500) then
+		begin
+			tab[minVis].visible := True;
+			maxVis := 1;
+		end;
+	end;
+
+
+repeat
+
+	
+		
+
+
+	while not(tab[minVis].visible) do
+			begin
+			minVis := minVis + 1;
+			end;
+
+
+
+	if (MilliSecondsBetween(Now, Deb) > tab[maxVis + 1].temps - 510) and (MilliSecondsBetween(Now, Deb) < tab[maxVis + 1].temps - 500) then
+		begin
+			maxVis := maxVis + 1;
+			tab[maxVis].visible := True;
+		end;
+
+
+
+
+
+	
+		
+	for i := minVis to maxVis do
+		begin
+		
+			if (MilliSecondsBetween(Now, Deb) > tab[i].temps) then
+				tab[i].visible := False
+			else 
+				begin
+				
+				
+					GotoXY(tab[i].posX, tab[i].posY - 1);
+					write(' ');
+					GotoXY(tab[i].posX, tab[i].posY);
+					write('=');
+				
+				
+					 if tab[i].posY + 1 <= 18 then
 						tab[i].posY := tab[i].posY + 1;
-						sleep(50);
-					
-					end;
-		N := N + 1;	
-	end;	
+			
+
+					sleep(10);
+				end;
+		
+		end;
+
+
+	
+	
+until minVis = MAX;
+
 
 	
 
@@ -198,3 +253,19 @@ while N <= MAX do
 	Mix_CloseAudio();
 
 END.
+
+{MilliSecondsBetween(Now, Deb)}
+
+
+{
+begin
+	GotoXY(tab[i].posX, tab[i].posY - 1);
+	write(' ');
+	GotoXY(tab[i].posX, tab[i].posY);
+	write('=');
+
+
+	tab[i].posY := tab[i].posY + 1;
+	sleep(50);
+
+end;}
