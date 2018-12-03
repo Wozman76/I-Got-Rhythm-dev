@@ -55,8 +55,8 @@ begin
 
 	GotoXY(28, 19);
 	write('| C | V | B | N | ? |');
-	GotoXY(28,21);
-	write('| S   P   A   C   E |');
+
+
 end;
 
 
@@ -76,7 +76,7 @@ end;
 
 
 var tab : TabMusic;
-	deb,deb1, deb2 : TDateTime;
+	deb : TDateTime;
 	i, minVis, maxVis : Word;
 	
 	keyPressed : TKeyEvent;
@@ -96,65 +96,7 @@ BEGIN
 	afficherInterface;
 
 	deb := Now;
-	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	{while True do
-	begin
-		keyPressed := GetKeyEvent;
-		writeln(GetKeyEventCode(keyPressed));
-	end;}
-
-	
-	
-
-	{tab[1].posY := 2;
-
-	
-	
-	writeln(tab[1].temps);
-	///tab[1].temps := 5000;
-	
-	while True do
-	for i := 1 to 10 do
-	begin
-
-
-	if ((tab[i].temps - 300) > MilliSecondsBetween(Now, deb)) and ((tab[i].temps - 500) < MilliSecondsBetween(Now, deb)) then
-		begin
-		TextColor(Yellow);
-		GotoXY(tab[i].posX,1);
-		write(tab[i].key);
-		end
-	else if (tab[i].temps - 300 < MilliSecondsBetween(Now, deb)) and ((tab[i].temps + 300) > MilliSecondsBetween(Now, deb) + 300) then
-		begin
-		TextColor(Green);
-		GotoXY(tab[i].posX,1);
-		write(tab[i].key);
-		end
-	else 
-		begin
-		TextColor(White);
-		GotoXY(tab[i].posX,1);
-		write(tab[i].key);	
-		end;
-	end;}
 	
 	
 	for i := 1 to MAX do
@@ -183,7 +125,7 @@ minVis := 1;
 
 while not(tab[minVis].visible) do
 	begin
-	if (MilliSecondsBetween(Now, Deb) > tab[minVis].temps - 510) and (MilliSecondsBetween(Now, Deb) < tab[minVis].temps - 500) then
+	if (MilliSecondsBetween(Now, Deb) > tab[minVis].temps - (18*50)) then
 		begin
 			tab[minVis].visible := True;
 			maxVis := 1;
@@ -204,7 +146,7 @@ repeat
 
 
 
-	if (MilliSecondsBetween(Now, Deb) > tab[maxVis + 1].temps - 510) and (MilliSecondsBetween(Now, Deb) < tab[maxVis + 1].temps - 500) then
+	if (MilliSecondsBetween(Now, Deb) > tab[maxVis + 1].temps - (18*50)) then
 		begin
 			maxVis := maxVis + 1;
 			tab[maxVis].visible := True;
@@ -220,7 +162,12 @@ repeat
 		begin
 		
 			if (MilliSecondsBetween(Now, Deb) > tab[i].temps) then
-				tab[i].visible := False
+				begin
+					tab[i].visible := False;
+					GotoXY(tab[i].posX, tab[i].posY);
+					write('-');
+				end
+				
 			else 
 				begin
 				
@@ -235,11 +182,11 @@ repeat
 						tab[i].posY := tab[i].posY + 1;
 			
 
-					sleep(10);
 				end;
 		
 		end;
 
+	delay(50);
 
 	
 	
@@ -254,18 +201,4 @@ until minVis = MAX;
 
 END.
 
-{MilliSecondsBetween(Now, Deb)}
 
-
-{
-begin
-	GotoXY(tab[i].posX, tab[i].posY - 1);
-	write(' ');
-	GotoXY(tab[i].posX, tab[i].posY);
-	write('=');
-
-
-	tab[i].posY := tab[i].posY + 1;
-	sleep(50);
-
-end;}

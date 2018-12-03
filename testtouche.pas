@@ -18,27 +18,31 @@ InitKeyBoard();
 	deb := Now;
 
 	Repeat
-		mot_tape := GetKeyEvent();
-		mot_transforme := TranslateKeyEvent(mot_tape);
-		chaine := KeyEventToString (mot_transforme);
-		writeln ('score1 := ', score);
-		
-				for i := 1 to 10 do
-					begin
-						touchaverif := (tab[i].key);
-						//writeln ('tab[i] = ', tab[i].key);
-						writeln ('touchaverif = ', touchaverif);
-						tempsaverif := (tab[i].temps);
-						writeln ('tempsaverif := ', tempsaverif);
-						writeln (MilliSecondsBetween(Now, Deb));
-						If touchaverif = chaine Then
-							If (tempsaverif < MilliSecondsBetween(Now, Deb)+10) or (tempsaverif > MilliSecondsBetween(Now, Deb)-10) Then
-								score := score + 1;
-					end;
+		if GetKeyEvent <> 0 then;
+		begin
+			mot_tape := GetKeyEvent();
+			mot_transforme := TranslateKeyEvent(mot_tape);
+			chaine := GetKeyEventChar(mot_transforme);
+			writeln ('score1 := ', score);
+			
+					for i := 1 to 10 do
+						begin
+							touchaverif := (tab[i].key);
+							//writeln ('tab[i] = ', tab[i].key);
+							writeln ('touchaverif = ', touchaverif);
+							tempsaverif := (tab[i].temps);
+							writeln ('tempsaverif := ', tempsaverif);
+							writeln (MilliSecondsBetween(Now, Deb));
+							If touchaverif = chaine Then
+								If (tempsaverif < MilliSecondsBetween(Now, Deb)+10) or (tempsaverif > MilliSecondsBetween(Now, Deb)-10) Then
+									score := score + 1;
+						end;
+		end;
 DoneKeyBoard();
 writeln ('score2 := ', score);
 		
 	Until (MilliSecondsBetween(Now, Deb) = 1000000);
+	
 end;
 
 procedure initTab(music : String; var tab : TabMusic);
