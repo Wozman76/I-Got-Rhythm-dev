@@ -10,7 +10,7 @@ program testeur;
 }
 
 
-uses sdl, sdl_mixer_nosmpeg, IGRTypes, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif};
+uses sdl, sdl_mixer_nosmpeg, IGRTypes, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif}, IGRInterface;
 
 CONST 	AUDIO_FREQUENCY:INTEGER=22050;
 		AUDIO_FORMAT:WORD=AUDIO_S16;
@@ -97,7 +97,7 @@ var tab : TabMusic;
 
 BEGIN
 
-	//startScreen;
+	startScreen;
 	
 	SDL_Init(SDL_INIT_AUDIO);
 	{$ifdef Unix}

@@ -22,7 +22,7 @@ procedure nomUser (var nom : String);
 
 
 Implementation
-uses crt, sysutils, keyboard, IGRSon;
+uses crt, sysutils, keyboard;
 
 procedure startScreen();
 var x, y : Word;
@@ -132,7 +132,7 @@ var ficMusniv : Text;
 	mus : String;
 	i : Word;
 	choix : Boolean;
-	music: pMIX_MUSIC=NIL;
+
 begin
 	i := 0;
 	choix := False;
@@ -169,11 +169,7 @@ begin
 	
 	
 	
-	SDL_Init(SDL_INIT_AUDIO);
-	son(music, musique);
-	SDL_DELAY(10000);
-	MIX_FREEMUSIC(music);
-	Mix_CloseAudio();
+
 end;
 
 
