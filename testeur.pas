@@ -1,6 +1,16 @@
 program testeur;
 
-uses sdl, sdl_mixer, IGRTypes, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif};
+{
+    ____   ______      __     ____  __          __  __            
+   /  _/  / ________  / /_   / __ \/ /_  __  __/ /_/ /_  ____ ___ 
+   / /   / / __/ __ \/ __/  / /_/ / __ \/ / / / __/ __ \/ __ `__ \
+ _/ /   / /_/ / /_/ / /_   / _, _/ / / / /_/ / /_/ / / / / / / / /
+/___/   \____/\____/\__/  /_/ |_/_/ /_/\__, /\__/_/ /_/_/ /_/ /_/ 
+                                      /____/                      
+}
+
+
+uses sdl, sdl_mixer_nosmpeg, IGRTypes, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif};
 
 CONST 	AUDIO_FREQUENCY:INTEGER=22050;
 		AUDIO_FORMAT:WORD=AUDIO_S16;
@@ -65,7 +75,7 @@ procedure son(var sound : pMIX_MUSIC);
 begin
     if MIX_OpenAudio(AUDIO_FREQUENCY, AUDIO_FORMAT,AUDIO_CHANNELS, 
 		AUDIO_CHUNKSIZE)<>0 then HALT;
-	sound := MIX_LOADMUS('ressources/Irish_tavern_music.wav');
+	sound := MIX_LOADMUS('ressources/bensound-creativeminds.mp3');
 
     MIX_VolumeMusic(MIX_MAX_VOLUME);
     MIX_PlayMusic(sound, -1);
@@ -77,7 +87,7 @@ end;
 
 var tab : TabMusic;
 	deb : TDateTime;
-	i, minVis, maxVis : Word;
+	i,j , minVis, maxVis : Word;
 	
 	keyPressed : TKeyEvent;
 	music: pMIX_MUSIC=NIL;
@@ -86,18 +96,21 @@ var tab : TabMusic;
 	
 
 BEGIN
+
+	//startScreen;
+	
 	SDL_Init(SDL_INIT_AUDIO);
 	{$ifdef Unix}
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
 	{$endif}
 	
-	///son(music);
-	initTab('song1',tab);
+	son(music);
+	initTab('creativemind',tab);
 	afficherInterface;
 
 	deb := Now;
 
-	
+	j := 0;
 	
 	for i := 1 to MAX do
 		begin
@@ -110,17 +123,17 @@ BEGIN
 			end;
 			
 			tab[i].posY := 2;
-
+			
 		
 		end;
 		
 		
-		
-		
+
 		
 /////////////////////////////////////	
 minVis := 1;
-
+son(music);
+sleep(300);
 
 
 while not(tab[minVis].visible) do
@@ -139,7 +152,7 @@ repeat
 		
 
 
-	while not(tab[minVis].visible) do
+	if (tab[minVis].visible = False) and ((maxVis - minVis) > 0) then
 			begin
 			minVis := minVis + 1;
 			end;
@@ -153,14 +166,15 @@ repeat
 		end;
 
 
-
+			GotoXY(1,1);
+			write(MilliSecondsBetween(Now, Deb));
 
 
 	
 		
 	for i := minVis to maxVis do
 		begin
-		
+
 			if (MilliSecondsBetween(Now, Deb) > tab[i].temps) then
 				begin
 					tab[i].visible := False;
@@ -185,7 +199,7 @@ repeat
 				end;
 		
 		end;
-
+	j := j + 1;
 	delay(50);
 
 	
