@@ -7,8 +7,8 @@ Interface
 uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, IGRTypes, IGRInterface, IGRSon;
 
 procedure initTab(music : String; var tab : TabMusic);
-procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic);
-procedure verifTouche(tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
+procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic; var score : Word);
+procedure verifTouche(var tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
 
 Implementation
 
@@ -41,16 +41,15 @@ begin
 		end;
 end;
 		
-procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic);
+procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic; var score : Word);
 var i, minVis, maxVis : Word;
 	deb : TDateTime;
-	score, compteur, b : Word;
+	compteur, b : Word;
 
 begin
 minVis := 1;
-score := 0;
 compteur := 0;
-b := 0;
+b := 1;
 son(sound, musique);
 //sleep(200);
 deb := Now;
@@ -96,16 +95,22 @@ repeat
 			write(b);
 
 
+
 	
 		
 	for i := minVis to maxVis do
 		begin
 
+
+				
 			if (MilliSecondsBetween(Now, Deb) > tab[i].temps) then
 				begin
 					tab[i].visible := False;
+
 					GotoXY(tab[i].posX, tab[i].posY);
 					write('-');
+					if (MilliSecondsBetween(Now, Deb) > tab[i].temps) and (tab[i].appui = False) then
+						compteur := 0;
 				end
 				
 			else 
@@ -120,6 +125,7 @@ repeat
 				
 					 if tab[i].posY + 1 <= 18 then
 						tab[i].posY := tab[i].posY + 1;
+
 			
 
 				end;
@@ -139,7 +145,7 @@ end;
 
 
 
-procedure verifTouche(tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
+procedure verifTouche(var tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
 var motTape : TKeyEvent;
 	touche : Char;
 
@@ -149,12 +155,15 @@ If PollKeyEvent <> 0 then
 		motTape := GetKeyEvent;
 		
 		touche := GetKeyEventChar(TranslateKeyEvent(motTape));
-	
+
 		if (touche = 'c') or (touche = 'v') or (touche = 'b') or (touche = 'n') or (touche = ',') then
 			begin
 				if touche = ',' then touche := '?';
-				if  (MilliSecondsBetween(deb, Now) < tab[i].temps + 500) and (MilliSecondsBetween(deb, Now) > tab[i].temps - 100) and (touche = tab[i].key) then
+				if  (MilliSecondsBetween(deb, Now) < tab[i].temps + 100) and (MilliSecondsBetween(deb, Now) > tab[i].temps - 100) and (touche = tab[i].key) then
 					begin
+						tab[i].appui := True;
+						GotoXY(1,5);
+						write(tab[i].appui);
 						score := score + 1 * b;
 						compteur := compteur + 1;
 						case compteur of 
@@ -173,6 +182,9 @@ If PollKeyEvent <> 0 then
 	
 	end;
 end;
+
+
+
 
 
 

@@ -10,7 +10,7 @@ program testeur;
 }
 
 
-uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif}, IGRTypes, IGRInterface, IGRSon, IGRJeu;
+uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif}, IGRTypes, IGRInterface, IGRSon, IGRJeu, IGRScore;
 
 
 
@@ -19,14 +19,17 @@ uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} u
 
 
 var tab : TabMusic;
-	niveau : Integer;
-	musique, user : String;
+	niveau : Word;
+	musique : String;
 	sound: pMIX_MUSIC=NIL;
-	
-
+	score : Word;
+	player : Joueur;
+	tabScores : HighScores;
 	
 
 BEGIN
+
+	score := 0;
 	{$ifdef Unix}
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
 	{$endif}
@@ -34,10 +37,10 @@ BEGIN
 	
 	
 	startScreen;
-	nomUser(user);
-	difficulte(niveau, user);
-	choixMusique(niveau,musique);
-	
+	joueur(player);
+	difficulte(niveau, player);
+
+	choixMusique(niveau, musique);
 	
 	
 	
@@ -46,7 +49,12 @@ BEGIN
 	
 	initTab(musique,tab);
 	afficherInterface;
-	partie(sound, musique, tab);
+	partie(sound, musique, tab, score);
+	
+	clrscr;
+	stockageScore(player, score, tabScores, musique);
+	afficherHighscores(musique, player, tabScores);
+	afficherScore(score);
 	
 
 

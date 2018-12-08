@@ -20,12 +20,20 @@ Type Touche = record
 	key : Char;
 	posX, posY : Word;
 	temps : Longword;
-	couleur : Couleur;
-	visible : Boolean;
+	appui, visible : Boolean;
+
 end;
 
-Type TabMusic = Array[1..MAX] of Touche;
 
+Type Joueur = record
+	nom : String;
+	score : Word;
+end;
+
+
+
+Type TabMusic = Array[1..MAX] of Touche;
+Type HighScores = array[1..10] of Joueur;
 
 
 implementation

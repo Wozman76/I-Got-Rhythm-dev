@@ -11,18 +11,19 @@ unit IGRInterface;
 
 
 Interface
+uses crt, sysutils, keyboard, IGRTypes;
 
 procedure startScreen();
-procedure difficulte(var niveau : Integer; user : String);
-procedure choixMusique(niveau : Integer ; var musique : String);
-procedure nomUser (var nom : String);
+procedure difficulte(var niveau : Word; player : Joueur);
+procedure choixMusique(niveau : Word ; var musique : String);
+procedure joueur(var player : Joueur);
 procedure afficherInterface();
 
 
 
 
 Implementation
-uses crt, sysutils, keyboard;
+
 
 procedure startScreen();
 var x, y : Word;
@@ -116,19 +117,19 @@ end;
 
 
 {nom utilisateur}
-procedure nomUser (var nom : String);
+procedure joueur (var player : Joueur);
 begin
 	writeln('Quel est votre nom?');
-	readln(nom);
+	readln(player.nom);
 	clrscr;
 end;
 
 
 {choix de la difficultée}
-procedure difficulte(var niveau : Integer; user : String);
+procedure difficulte(var niveau : Word; player : Joueur);
 begin
 	niveau := 0;
-	writeln('Bonjour ' + user + ' !');
+	writeln('Bonjour ' + player.nom + ' !');
 	Repeat
 		writeln ('Quelle difficulté voulez-vous?');
 		writeln;
@@ -140,7 +141,7 @@ end;
 
 
 {choix de la musique en fonction de la difficultée}
-procedure choixMusique(niveau : Integer ; var musique : String);
+procedure choixMusique(niveau : Word ; var musique : String);
 var ficMusniv : Text;
 	mus : String;
 	i : Word;
@@ -211,6 +212,10 @@ begin
 
 
 end;
+
+
+
+
 
 
 
