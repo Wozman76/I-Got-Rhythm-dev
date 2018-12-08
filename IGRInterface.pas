@@ -109,7 +109,6 @@ begin
 	while GetKeyEventChar(TranslateKeyEvent(GetKeyEvent())) <> ' ' do
 		sleep(10);
 
-		
 	clrscr;
 
 end; 

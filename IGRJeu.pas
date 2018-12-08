@@ -8,7 +8,7 @@ uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, IGRTypes, IGRIn
 
 procedure initTab(music : String; var tab : TabMusic);
 procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic);
-
+procedure verifTouche(tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
 
 Implementation
 
@@ -44,11 +44,15 @@ end;
 procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic);
 var i, minVis, maxVis : Word;
 	deb : TDateTime;
+	score, compteur, b : Word;
 
 begin
 minVis := 1;
+score := 0;
+compteur := 0;
+b := 0;
 son(sound, musique);
-sleep(200);
+//sleep(200);
 deb := Now;
 
 
@@ -84,6 +88,12 @@ repeat
 
 			GotoXY(1,1);
 			write(MilliSecondsBetween(Now, Deb));
+			GotoXY(1,2);
+			write(score);
+			GotoXY(1,3);
+			write(compteur);
+			GotoXY(1,4);
+			write(b);
 
 
 	
@@ -113,6 +123,7 @@ repeat
 			
 
 				end;
+			verifTouche(tab, i, deb, score, compteur, b);
 		
 		end;
 	delay(50);
@@ -127,6 +138,41 @@ end;
 
 
 
+
+procedure verifTouche(tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
+var motTape : TKeyEvent;
+	touche : Char;
+
+begin
+If PollKeyEvent <> 0 then		
+	begin
+		motTape := GetKeyEvent;
+		
+		touche := GetKeyEventChar(TranslateKeyEvent(motTape));
+	
+		if (touche = 'c') or (touche = 'v') or (touche = 'b') or (touche = 'n') or (touche = ',') then
+			begin
+				if touche = ',' then touche := '?';
+				if  (MilliSecondsBetween(deb, Now) < tab[i].temps + 500) and (MilliSecondsBetween(deb, Now) > tab[i].temps - 100) and (touche = tab[i].key) then
+					begin
+						score := score + 1 * b;
+						compteur := compteur + 1;
+						case compteur of 
+							2 : b := 2;
+							4 : b := 3;
+							6 : b := 4;
+						end;
+	
+					end	
+				else 
+					begin
+						compteur := 0;
+						b := 1;
+					end;
+			end;
+	
+	end;
+end;
 
 
 
