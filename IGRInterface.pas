@@ -122,7 +122,7 @@ begin
 		writeln ('quel difficulté voulez-vous? choissisez 1, 2 ou 3');
 		readln (niveau);
 	until (niveau = 1) or (niveau = 2) or (niveau = 3);
-	writeln ('vous avez choisie le niveau ', niveau);
+	clrscr;
 end;
 
 
@@ -164,7 +164,8 @@ begin
 		close(ficMusniv);
 	until (choix = true);
 	writeln('vous avez choisi la musique ', musique);
-	
+	sleep(2000);
+	clrscr;
 	
 	
 	

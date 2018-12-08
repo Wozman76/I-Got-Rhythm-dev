@@ -1,5 +1,5 @@
-unit IGRSon;
-{$MODE DELPHI}
+unit IGRSon; {$MODE DELPHI}
+
 
 {
     ____   ______      __     ____  __          __  __            
@@ -10,9 +10,8 @@ unit IGRSon;
                                       /____/                      
 }
 
-
 Interface
-uses sdl, sdl_mixer;
+uses sdl, sdl_mixer_nosmpeg;
 
 CONST 	AUDIO_FREQUENCY:INTEGER=22050;
 		AUDIO_FORMAT:WORD=AUDIO_S16;
@@ -34,7 +33,7 @@ begin
 	
     if MIX_OpenAudio(AUDIO_FREQUENCY, AUDIO_FORMAT,AUDIO_CHANNELS, 
 		AUDIO_CHUNKSIZE)<>0 then HALT;
-	sound := MIX_LOADMUS(PChar('ressources/' + musique + '.wav'));
+	sound := MIX_LOADMUS(PChar('ressources/' + musique + '.mp3'));
 
     MIX_VolumeMusic(MIX_MAX_VOLUME);
     MIX_PlayMusic(sound, -1);

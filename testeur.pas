@@ -10,12 +10,8 @@ program testeur;
 }
 
 
-uses sdl, sdl_mixer_nosmpeg, IGRTypes, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif}, IGRInterface;
+uses sdl, sdl_mixer_nosmpeg, IGRTypes, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif}, IGRInterface, IGRSon;
 
-CONST 	AUDIO_FREQUENCY:INTEGER=22050;
-		AUDIO_FORMAT:WORD=AUDIO_S16;
-		AUDIO_CHANNELS:INTEGER=2;
-		AUDIO_CHUNKSIZE:INTEGER=4096;
 
 
 
@@ -70,16 +66,7 @@ begin
 end;
 
 
-{Procedure de mise en musique}
-procedure son(var sound : pMIX_MUSIC);
-begin
-    if MIX_OpenAudio(AUDIO_FREQUENCY, AUDIO_FORMAT,AUDIO_CHANNELS, 
-		AUDIO_CHUNKSIZE)<>0 then HALT;
-	sound := MIX_LOADMUS('ressources/bensound-creativeminds.mp3');
 
-    MIX_VolumeMusic(MIX_MAX_VOLUME);
-    MIX_PlayMusic(sound, -1);
-end;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,8 +75,9 @@ end;
 var tab : TabMusic;
 	deb : TDateTime;
 	i,j , minVis, maxVis : Word;
+	niveau : Integer;
+	musique : String;
 	
-	keyPressed : TKeyEvent;
 	music: pMIX_MUSIC=NIL;
 	
 
@@ -98,17 +86,22 @@ var tab : TabMusic;
 BEGIN
 
 	startScreen;
+	difficulte(niveau);
+	choixMusique(niveau,musique);
+	
+	
+	
 	
 	SDL_Init(SDL_INIT_AUDIO);
 	{$ifdef Unix}
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
 	{$endif}
 	
-	son(music);
+	//son(music, 'bensound-creativeminds');
 	initTab('creativemind',tab);
 	afficherInterface;
 
-	deb := Now;
+	
 
 	j := 0;
 	
@@ -132,8 +125,9 @@ BEGIN
 		
 /////////////////////////////////////	
 minVis := 1;
-son(music);
-sleep(300);
+son(music, musique);
+sleep(200);
+deb := Now;
 
 
 while not(tab[minVis].visible) do

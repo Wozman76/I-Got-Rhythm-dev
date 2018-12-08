@@ -18,7 +18,8 @@ Type Couleur = (orange, vert, rouge);
 
 Type Touche = record
 	key : Char;
-	temps, posX, posY : Word;
+	posX, posY : Word;
+	temps : Longword;
 	couleur : Couleur;
 	visible : Boolean;
 end;
