@@ -13,10 +13,10 @@ unit IGRInterface;
 Interface
 
 procedure startScreen();
-procedure difficulte(var niveau : Integer);
+procedure difficulte(var niveau : Integer; user : String);
 procedure choixMusique(niveau : Integer ; var musique : String);
 procedure nomUser (var nom : String);
-
+procedure afficherInterface();
 
 
 
@@ -108,18 +108,32 @@ begin
 	
 	while GetKeyEventChar(TranslateKeyEvent(GetKeyEvent())) <> ' ' do
 		sleep(10);
+
 		
 	clrscr;
 
 end; 
 
 
+
+{nom utilisateur}
+procedure nomUser (var nom : String);
+begin
+	writeln('Quel est votre nom?');
+	readln(nom);
+	clrscr;
+end;
+
+
 {choix de la difficultée}
-procedure difficulte(var niveau : Integer);
+procedure difficulte(var niveau : Integer; user : String);
 begin
 	niveau := 0;
+	writeln('Bonjour ' + user + ' !');
 	Repeat
-		writeln ('quel difficulté voulez-vous? choissisez 1, 2 ou 3');
+		writeln ('Quelle difficulté voulez-vous?');
+		writeln;
+		writeln('1 (facile), 2 (moyen) ou 3 (difficile)');
 		readln (niveau);
 	until (niveau = 1) or (niveau = 2) or (niveau = 3);
 	clrscr;
@@ -149,11 +163,11 @@ begin
 			readln(ficMusniv, mus); 
 			writeln('- ',i, ' ' + mus);
 		end;
-	close(ficMusniv);
+	//close(ficMusniv);
 
 	Repeat
 		writeln('quelle musique voulez-vous?');
-		readln (musique);
+		readln(musique);
 		reset(ficMusniv);
 		while not (eof(ficMusniv)) do
 			begin	
@@ -174,13 +188,30 @@ begin
 end;
 
 
-{nom utilisateur}
-procedure nomUser (var nom : String);
-begin
-	writeln('quel est votre nom?');
-	readln(nom);
-end;
 
+
+{affiche grille de jeu}
+procedure afficherInterface();
+var i : Word;
+begin
+	for i := 1 to 17 do
+		begin
+			GotoXY(28,i);
+			write('|   |   |   |   |   |');
+	
+		end;
+		
+
+	
+	
+	GotoXY(1,18);
+	write('--------------------------------------------------------------------------------');
+
+	GotoXY(28, 19);
+	write('| C | V | B | N | ? |');
+
+
+end;
 
 
 
