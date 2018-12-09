@@ -10,7 +10,7 @@ program testeur;
 }
 
 
-uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, {$ifdef Unix} unix {$endif}, IGRTypes, IGRInterface, IGRSon, IGRJeu, IGRScore;
+uses sdl, sdl_mixer_nosmpeg, crt, sysutils, keyboard,   {$ifdef Unix} unix {$endif}, IGRTypes, IGRInterface, IGRSon, IGRJeu, IGRScore;
 
 
 
@@ -25,41 +25,63 @@ var tab : TabMusic;
 	score : Word;
 	player : Joueur;
 	tabScores : HighScores;
+	again : Boolean;
 	
 
 BEGIN
-
-	score := 0;
+	again := False;
+	
 	{$ifdef Unix}
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
 	{$endif}
 	
+	InitKeyBoard();
 	
+	//startScreen;
 	
-	startScreen;
-	joueur(player);
-	difficulte(niveau, player);
-
-	choixMusique(niveau, musique);
+	repeat
+		score := 0;
+		joueur(player);
+		difficulte(niveau, player);
 	
-	
-	
-	SDL_Init(SDL_INIT_AUDIO);
-
-	
-	initTab(musique,tab);
-	afficherInterface;
-	partie(sound, musique, tab, score);
-	
-	clrscr;
-	stockageScore(player, score, tabScores, musique);
-	afficherHighscores(musique, player, tabScores);
-	afficherScore(score);
-	
+		choixMusique(niveau, musique);
 
 
-	MIX_FREEMUSIC(sound);
-	Mix_CloseAudio();
+		afficherHighscores(musique, player, tabScores);		
+
+		sleep(3000);
+		
+		clrscr;
+		
+		
+		SDL_Init(SDL_INIT_AUDIO);
+	
+		
+		initTab(musique,tab);
+		afficherInterface;
+		compteRebour();
+		partie(sound, musique, tab, score);
+		sleep(2000);
+		clrscr;
+		
+		stockageScore(player, score, tabScores, musique);
+		afficherHighscores(musique, player, tabScores);
+		afficherScore(score);
+		sleep(2000);
+	
+	
+
+
+
+		nouvellePartie(again, player);
+		MIX_FREEMUSIC(sound);
+		Mix_CloseAudio();
+		
+	until not(again);
+
+
+	DoneKeyboard();
+
 
 END.
 

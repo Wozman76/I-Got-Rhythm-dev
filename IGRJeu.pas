@@ -1,5 +1,13 @@
 unit IGRJeu;
 
+{
+    ____   ______      __     ____  __          __  __            
+   /  _/  / ________  / /_   / __ \/ /_  __  __/ /_/ /_  ____ ___ 
+   / /   / / __/ __ \/ __/  / /_/ / __ \/ / / / __/ __ \/ __ `__ \
+ _/ /   / /_/ / /_/ / /_   / _, _/ / / / /_/ / /_/ / / / / / / / /
+/___/   \____/\____/\__/  /_/ |_/_/ /_/\__, /\__/_/ /_/_/ /_/ /_/ 
+                                      /____/                      
+}
 
 
 Interface
@@ -45,13 +53,14 @@ procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic; var s
 var i, minVis, maxVis : Word;
 	deb : TDateTime;
 	compteur, b : Word;
+	fin : Boolean;
 
 begin
 minVis := 1;
 compteur := 0;
 b := 1;
 son(sound, musique);
-//sleep(200);
+
 deb := Now;
 
 
@@ -86,13 +95,13 @@ repeat
 
 
 			GotoXY(1,1);
-			write(MilliSecondsBetween(Now, Deb));
+			write(trunc(MilliSecondsBetween(Now, deb)/1000/60),'min ', trunc((MilliSecondsBetween(Now, deb)/1000/60 - trunc(MilliSecondsBetween(Now, deb)/1000/60))*60),'s ');
 			GotoXY(1,2);
-			write(score);
+			write('Score : ', score);
 			GotoXY(1,3);
-			write(compteur);
-			GotoXY(1,4);
-			write(b);
+			write('Multiplicateur : x',b);
+			//GotoXY(1,4);
+			//write('D''affilé : ',compteur);
 
 
 
@@ -101,16 +110,21 @@ repeat
 	for i := minVis to maxVis do
 		begin
 
-
+			if tab[i].temps = 0 then
+				fin := True;
 				
-			if (MilliSecondsBetween(Now, Deb) > tab[i].temps) then
+			if (MilliSecondsBetween(Now, deb) > tab[i].temps) then
 				begin
 					tab[i].visible := False;
 
 					GotoXY(tab[i].posX, tab[i].posY);
-					write('-');
-					if (MilliSecondsBetween(Now, Deb) > tab[i].temps) and (tab[i].appui = False) then
-						compteur := 0;
+					if not(fin) then
+						write('-');
+					if (MilliSecondsBetween(Now, deb) > tab[i].temps) and (tab[i].appui = False) then
+						begin
+							compteur := 0;
+							b := 1;
+						end;
 				end
 				
 			else 
@@ -136,7 +150,8 @@ repeat
 
 	
 	
-until (minVis = MAX);
+until (fin);
+
 	
 		
 		
@@ -162,8 +177,6 @@ If PollKeyEvent <> 0 then
 				if  (MilliSecondsBetween(deb, Now) < tab[i].temps + 100) and (MilliSecondsBetween(deb, Now) > tab[i].temps - 100) and (touche = tab[i].key) then
 					begin
 						tab[i].appui := True;
-						GotoXY(1,5);
-						write(tab[i].appui);
 						score := score + 1 * b;
 						compteur := compteur + 1;
 						case compteur of 

@@ -18,8 +18,8 @@ procedure difficulte(var niveau : Word; player : Joueur);
 procedure choixMusique(niveau : Word ; var musique : String);
 procedure joueur(var player : Joueur);
 procedure afficherInterface();
-
-
+procedure nouvellePartie(var again : Boolean; player : Joueur);
+procedure compteRebour();
 
 
 Implementation
@@ -214,8 +214,45 @@ begin
 end;
 
 
+procedure nouvellePartie(var again : Boolean; player : Joueur);
+var ouiNon : Char;
+begin
+writeln('Voulez-vous rejouer? o (oui) / n (non)');
+repeat
+readln(ouiNon);
+case ouiNon of 
+	'o' : again := True;
+	'n' : again := False;
+else writeln('Je n''ai pas compris...');
+end;
+
+until (ouiNon = 'o') or (ouiNon = 'n');
+
+if not(again) then
+	begin
+		writeln('Au revoir, ' + player.nom);
+	end;
 
 
+end;
+
+procedure compteRebour();
+var i, x, y : Word;
+begin
+	x := 38;
+	y := 12;
+	sleep(1000);
+	for i := 3 downto 1 do
+		begin
+			GotoXY(x,y);
+			write(i);
+			sleep(1000);
+			GotoXY(x,y);
+			write(' ');
+		end;
+	GotoXY(1,1);
+
+end;
 
 
 

@@ -5,7 +5,6 @@ uses DateUtils, crt, sysutils, keyboard, IGRTypes;
 
 var fichier : file of Touche;
 	deb : TDateTime;
-	//temps : Longword;
 	tab : TabMusic;
 	i, j : Word;
 	k : TKeyEvent;
@@ -19,7 +18,7 @@ randomize;
 toucheChar := ' ';
 newTouche := ' ';
 i := 1;
-assign(fichier, 'rock.song');
+assign(fichier, 'creativeminds.song');
 
 
 
