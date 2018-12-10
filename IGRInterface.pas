@@ -157,27 +157,33 @@ begin
 	end;
 
 	reset(ficMusniv);
+	writeln('Quelle musique voulez-vous?');
 	while not (eof(ficMusniv)) do
 		begin
 			i := i + 1;
 			readln(ficMusniv, mus); 
 			writeln('- ',i, ' ' + mus);
 		end;
-	//close(ficMusniv);
-
+	close(ficMusniv);
+	
+	
 	Repeat
-		writeln('quelle musique voulez-vous?');
 		readln(musique);
 		reset(ficMusniv);
 		while not (eof(ficMusniv)) do
 			begin	
 				readln(ficMusniv, mus);
-					if (musique = mus) then
-						choix := true;
+				if (musique = mus) then
+					choix := true;
+				
 			end;
+		if not(choix) then
+			writeln('Je n''ai pas compris... Quelle musique voulez-vous?');
 		close(ficMusniv);
 	until (choix = true);
 	writeln('vous avez choisi la musique ', musique);
+
+
 	sleep(2000);
 	clrscr;
 	

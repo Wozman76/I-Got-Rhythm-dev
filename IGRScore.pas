@@ -16,7 +16,7 @@ uses sysutils, crt, IGRTypes;
 procedure afficherScore(score : Word);
 procedure afficherHighscores(musique : String; var player : Joueur; var tabScores : HighScores);
 procedure stockageScore(player : Joueur; score : Word; var tabScores : Highscores; musique : String);
-procedure ajoutScoreTableau(player : Joueur; taille : Integer; var tabScores : HighScores);
+procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
 
 Implementation
 
@@ -76,36 +76,34 @@ var fichier : File of Joueur;
 	playerFichier : Joueur;
 	
 begin
+
+	nbScores := 0;
 	player.score := score;
 	
 	assign(fichier, musique + '_scores.dat');
-
 	
-	//-------
-	
-	nbScores := 0;
 
 	if not(FileExists(musique + '_scores.dat')) then
 	 
 		rewrite(fichier)
 		
 	else 
+	begin
 	reset(fichier);
 	
 
 	while not(eof(fichier)) do
 		begin
+			nbScores := nbScores + 1;
 			read(fichier, playerFichier);
 			tabScores[nbScores] := playerFichier;
-			nbScores := nbScores + 1;
+			
 		end;
-
-
-	
+	end;
 
 	close(fichier);
+	
 
-	//-------
 		
 	ajoutScoreTableau(player, nbScores, tabScores);
 
@@ -118,33 +116,38 @@ begin
 	for j := 1 to nbScores + 1 do
 		write(fichier, tabScores[j]);
 		
+		
 	close(fichier);
-
+	
 
 end;
 
-procedure ajoutScoreTableau(player : Joueur; taille : Integer; var tabScores : HighScores);
-var pos : Integer;
+procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
+var i, j : Word;
+	tabTempScores : HighScores;
 begin
 
-	if taille < 10 then
-		begin
-			pos := taille + 1;
-			while (pos > 1) and (tabScores[pos - 1].score < player.score) do
-				begin
-					tabScores[pos] := tabScores[pos - 1];
-					pos := pos - 1;
-				end;
-			tabScores[pos].nom := player.nom;
-			tabScores[pos].score := player.score;
-			taille := taille + 1;
-			
-		end;
 
+	i := 1;
+	while (i < nbScores + 1) and (player.score < tabScores[i].score) do
+		begin
+			tabTempScores[i] := tabScores[i];
+			i := i + 1;
+		end;	
+	tabTempScores[i] := player;
+	
+	if i < nbScores + 1 then
+		for j := i to nbScores do
+		tabTempScores[j + 1] := tabScores[j];
+		
+
+		
+	for j := 1 to nbScores + 1 do
+		tabScores[j] := tabTempScores[j];
 
 end;
 
-
+ 
 
 
 END.

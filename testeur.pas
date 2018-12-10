@@ -40,14 +40,13 @@ BEGIN
 	//startScreen;
 	
 	repeat
-		score := 0;
+
 		joueur(player);
 		difficulte(niveau, player);
 	
 		choixMusique(niveau, musique);
-
-
-		afficherHighscores(musique, player, tabScores);		
+		
+		afficherHighscores(musique, player, tabScores);
 
 		sleep(3000);
 		
