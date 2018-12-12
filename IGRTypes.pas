@@ -32,8 +32,16 @@ end;
 
 
 
-Type TabMusic = Array[1..MAX] of Touche;
+
+
+Type TabMusic = array[1..MAX] of Touche;
 Type HighScores = array[1..10] of Joueur;
+
+Type TabListMusique = array[1..10] of String;
+Type ListeMusique = record
+	tabListMus : TabListMusique;
+	nbMusiques : Word;
+end;
 
 
 implementation

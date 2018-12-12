@@ -16,7 +16,7 @@ uses sysutils, crt, IGRTypes;
 procedure afficherScore(score : Word);
 procedure afficherHighscores(musique : String; var player : Joueur; var tabScores : HighScores);
 procedure stockageScore(player : Joueur; score : Word; var tabScores : Highscores; musique : String);
-procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
+//procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
 
 Implementation
 
@@ -66,6 +66,33 @@ begin
 		writeln('- ', tabScores[j].nom, ' : ', tabScores[j].score);
 	writeln;
 	
+
+end;
+
+
+
+procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
+var i, j : Word;
+	tabTempScores : HighScores;
+begin
+
+
+	i := 1;
+	while (i < nbScores + 1) and (player.score < tabScores[i].score) do
+		begin
+			tabTempScores[i] := tabScores[i];
+			i := i + 1;
+		end;	
+	tabTempScores[i] := player;
+	
+	if i < nbScores + 1 then
+		for j := i to nbScores do
+		tabTempScores[j + 1] := tabScores[j];
+		
+
+		
+	for j := 1 to nbScores + 1 do
+		tabScores[j] := tabTempScores[j];
 
 end;
 
@@ -122,30 +149,7 @@ begin
 
 end;
 
-procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
-var i, j : Word;
-	tabTempScores : HighScores;
-begin
 
-
-	i := 1;
-	while (i < nbScores + 1) and (player.score < tabScores[i].score) do
-		begin
-			tabTempScores[i] := tabScores[i];
-			i := i + 1;
-		end;	
-	tabTempScores[i] := player;
-	
-	if i < nbScores + 1 then
-		for j := i to nbScores do
-		tabTempScores[j + 1] := tabScores[j];
-		
-
-		
-	for j := 1 to nbScores + 1 do
-		tabScores[j] := tabTempScores[j];
-
-end;
 
  
 

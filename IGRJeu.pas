@@ -12,13 +12,62 @@ unit IGRJeu;
 
 Interface
 
-uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, IGRTypes, IGRInterface, IGRSon;
+uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, IGRTypes, IGRInterface, IGRSon, IGRScore;
 
+
+procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var again : Boolean);
 procedure initTab(music : String; var tab : TabMusic);
 procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic; var score : Word);
 procedure verifTouche(var tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
 
 Implementation
+
+procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var again : Boolean);
+var musique : String;
+	niveau : Word; 
+	tab : TabMusic;
+	sound: pMIX_MUSIC=NIL;
+	score : Word;
+begin
+	difficulte(niveau, player);
+	
+	choixMusique(niveau, musique);
+	
+	afficherHighscores(musique, player, tabScores);
+
+	sleep(3000);
+	
+	clrscr;
+	
+	
+	SDL_Init(SDL_INIT_AUDIO);
+
+	
+	initTab(musique,tab);
+	afficherInterface;
+	compteRebour();
+	partie(sound, musique, tab, score);
+	sleep(2000);
+	clrscr;
+	
+	stockageScore(player, score, tabScores, musique);
+	afficherHighscores(musique, player, tabScores);
+	afficherScore(score);
+	sleep(2000);
+
+
+
+
+
+	nouvellePartie(again, player);
+	MIX_FREEMUSIC(sound);
+	Mix_CloseAudio();
+end;
+
+
+
+
+
 
 procedure initTab(music : String; var tab : TabMusic);
 var i : Integer;

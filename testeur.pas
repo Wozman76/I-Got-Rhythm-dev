@@ -18,18 +18,18 @@ uses sdl, sdl_mixer_nosmpeg, crt, sysutils, keyboard,   {$ifdef Unix} unix {$end
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-var tab : TabMusic;
-	niveau : Word;
+var niveau : Word;
+	
+	
 	musique : String;
-	sound: pMIX_MUSIC=NIL;
-	score : Word;
 	player : Joueur;
 	tabScores : HighScores;
-	again : Boolean;
+	finPartie : Boolean;
+	choixMenu : Word;
 	
 
 BEGIN
-	again := False;
+	finPartie := False;
 	
 	{$ifdef Unix}
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
@@ -37,46 +37,36 @@ BEGIN
 	
 	InitKeyBoard();
 	
-	//startScreen;
-	
+	startScreen;
+	joueur(player);
 	repeat
 
-		joueur(player);
-		difficulte(niveau, player);
-	
-		choixMusique(niveau, musique);
 		
-		afficherHighscores(musique, player, tabScores);
+		
+		menu(choixMenu, player);
 
-		sleep(3000);
 		
-		clrscr;
-		
-		
-		SDL_Init(SDL_INIT_AUDIO);
+		case choixMenu of
+			1 : lancementPartie(player, tabScores, finPartie);
+			2 : begin
+					difficulte(niveau, player);
+					choixMusique(niveau, musique);
+					afficherHighscores(musique, player, tabScores);
+					writeln;
+					writeln;
+					writeln('Appuyez sur [ESPACE] pour continuer...');
 	
+					while GetKeyEventChar(TranslateKeyEvent(GetKeyEvent())) <> ' ' do
+						sleep(10);
+				
+					clrscr;
+					
+				end;
+			3 : choixMenu := 3;
+		end;
 		
-		initTab(musique,tab);
-		afficherInterface;
-		compteRebour();
-		partie(sound, musique, tab, score);
-		sleep(2000);
-		clrscr;
 		
-		stockageScore(player, score, tabScores, musique);
-		afficherHighscores(musique, player, tabScores);
-		afficherScore(score);
-		sleep(2000);
-	
-	
-
-
-
-		nouvellePartie(again, player);
-		MIX_FREEMUSIC(sound);
-		Mix_CloseAudio();
-		
-	until not(again);
+	until finPartie;
 
 
 	DoneKeyboard();

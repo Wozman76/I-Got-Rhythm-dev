@@ -14,11 +14,12 @@ Interface
 uses crt, sysutils, keyboard, IGRTypes;
 
 procedure startScreen();
+procedure menu(var choixMenu : Word; player : Joueur);
 procedure difficulte(var niveau : Word; player : Joueur);
 procedure choixMusique(niveau : Word ; var musique : String);
 procedure joueur(var player : Joueur);
 procedure afficherInterface();
-procedure nouvellePartie(var again : Boolean; player : Joueur);
+procedure nouvellePartie(var finPartie : Boolean; player : Joueur);
 procedure compteRebour();
 
 
@@ -110,7 +111,7 @@ begin
 	while GetKeyEventChar(TranslateKeyEvent(GetKeyEvent())) <> ' ' do
 		sleep(10);
 
-	clrscr;
+	
 
 end; 
 
@@ -119,72 +120,264 @@ end;
 {nom utilisateur}
 procedure joueur (var player : Joueur);
 begin
-	writeln('Quel est votre nom?');
-	readln(player.nom);
 	clrscr;
+	writeln('------------------------------ I Got Rhythm -------------------------------');
+	writeln;
+	writeln('Bonjour ! Quel est votre nom?');
+	writeln;
+	write('> ');
+	readln(player.nom);
+
 end;
+
+
+
+procedure menu(var choixMenu : Word; player : Joueur);
+var y : Word;
+	k : TKeyEvent;
+begin
+clrscr;
+writeln('------------------------------ I Got Rhythm -------------------------------');
+writeln;
+writeln('Bonjour ' + player.nom + ' ! Que voulez-vous faire ?');
+writeln;
+TextBackground(White);
+TextColor(Black);
+writeln('- Jouer');
+TextBackground(Black);
+TextColor(LightGray);
+writeln('- Highscores');
+writeln('- Crédits');
+
+y := 5;
+repeat 
+	k := GetKeyEvent;
+	case GetKeyEventCode(k) of
+		18432 : if (y > 5) then	y := y - 1;		
+		20480 : if (y < 7) then y := y + 1;
+	end;
+	
+	case y of 
+		5 : begin
+				GotoXY(1,5);
+				TextBackground(White);
+				TextColor(Black);
+				writeln('- Jouer');
+				TextBackground(Black);
+				TextColor(LightGray);
+				writeln('- Highscores');
+				writeln('- Crédits');
+			end;
+		6 : begin
+				GotoXY(1,5);
+				writeln('- Jouer');
+				TextBackground(White);
+				TextColor(Black);
+				writeln('- Highscores');
+				TextBackground(Black);
+				TextColor(LightGray);
+				writeln('- Crédits');
+			end;
+		7 : begin
+				GotoXY(1,5);
+				writeln('- Jouer');
+				writeln('- Highscores');
+				TextBackground(White);
+				TextColor(Black);
+				writeln('- Crédits');
+				TextBackground(Black);
+				TextColor(LightGray);
+			end;
+	end;
+	
+until GetKeyEventCode(k) = 7181; 
+
+choixMenu := y - 4;
+
+
+
+
+end;
+
+
+
 
 
 {choix de la difficultée}
 procedure difficulte(var niveau : Word; player : Joueur);
+var y : Word;
+	k : TKeyEvent;
 begin
 	niveau := 0;
-	writeln('Bonjour ' + player.nom + ' !');
-	Repeat
-		writeln ('Quelle difficulté voulez-vous?');
-		writeln;
-		writeln('1 (facile), 2 (moyen) ou 3 (difficile)');
-		readln (niveau);
-	until (niveau = 1) or (niveau = 2) or (niveau = 3);
 	clrscr;
+	writeln('------------------------------ I Got Rhythm -------------------------------');
+	writeln;
+	writeln ('Quelle difficulté voulez-vous?');
+	writeln;
+	TextBackground(White);
+	TextColor(Black);
+	writeln('- facile');
+	TextBackground(Black);
+	TextColor(LightGray);
+	writeln('- moyen');
+	writeln('- difficile');
+	
+	y := 5;
+	
+	repeat	
+		k := GetKeyEvent;
+		case GetKeyEventCode(k) of
+			18432 : if (y > 5) then	y := y - 1;		
+			20480 : if (y < 7) then y := y + 1;
+		end;
+		
+		case y of 
+			5 : begin
+					GotoXY(1,5);
+					TextBackground(White);
+					TextColor(Black);
+					writeln('- facile');
+					TextBackground(Black);
+					TextColor(LightGray);
+					writeln('- moyen');
+					writeln('- difficile');
+				end;
+			6 : begin
+					GotoXY(1,5);
+					writeln('- facile');
+					TextBackground(White);
+					TextColor(Black);
+					writeln('- moyen');
+					TextBackground(Black);
+					TextColor(LightGray);
+					writeln('- difficile');
+				end;
+			7 : begin
+					GotoXY(1,5);
+					writeln('- facile');
+					writeln('- moyen');
+					TextBackground(White);
+					TextColor(Black);
+					writeln('- difficile');
+					TextBackground(Black);
+					TextColor(LightGray);
+				end;
+		end;
+		
+	until GetKeyEventCode(k) = 7181; 
+	
+	niveau := y - 4;
+	
 end;
 
 
 {choix de la musique en fonction de la difficultée}
 procedure choixMusique(niveau : Word ; var musique : String);
 var ficMusniv : Text;
-	mus : String;
-	i : Word;
-	choix : Boolean;
+	musTemp : String;
+	i, y : Word;
+	//choix : Boolean;
+	musiqueListe : ListeMusique;
+	k : TKeyEvent;
 
 begin
+	
+	clrscr;
+	
 	i := 0;
-	choix := False;
 	case niveau of 
 		1 : assign(ficMusniv, 'listeFacile.txt');
 		2 : assign(ficMusniv, 'listeMedium.txt');
 		3 : assign(ficMusniv, 'listeDifficile.txt');
 	end;
+	reset(ficMusniv);
+	musiqueListe.nbMusiques := 0;
+	while not(eof(ficMusniv)) do
+			begin
+			readln(ficMusniv, musTemp);
+			musiqueListe.nbMusiques := musiqueListe.nbMusiques + 1;
+			end;
+	close(ficMusniv);
+
 
 	reset(ficMusniv);
+	writeln('------------------------------ I Got Rhythm -------------------------------');
+	writeln;
 	writeln('Quelle musique voulez-vous?');
+	writeln;
 	while not (eof(ficMusniv)) do
 		begin
 			i := i + 1;
-			readln(ficMusniv, mus); 
-			writeln('- ',i, ' ' + mus);
+			readln(ficMusniv, musiqueListe.tabListMus[i]);
+			if i = 1 then
+				begin
+					TextBackground(White);
+					TextColor(Black);
+					writeln('- ' + musiqueListe.tabListMus[1]);
+					TextBackground(Black);
+					TextColor(LightGray);
+					
+
+				end
+			else writeln('- ' + musiqueListe.tabListMus[i]);
 		end;
 	close(ficMusniv);
 	
 	
-	Repeat
-		readln(musique);
-		reset(ficMusniv);
-		while not (eof(ficMusniv)) do
-			begin	
-				readln(ficMusniv, mus);
-				if (musique = mus) then
-					choix := true;
-				
-			end;
-		if not(choix) then
-			writeln('Je n''ai pas compris... Quelle musique voulez-vous?');
-		close(ficMusniv);
-	until (choix = true);
-	writeln('vous avez choisi la musique ', musique);
+	y := 5;
+	
+	repeat	
+		k := GetKeyEvent;
+		case GetKeyEventCode(k) of
+			18432 : if (y > 5) then	y := y - 1;		
+			20480 : if (y < 7) then y := y + 1;
+		end;
+		
+		case y of 
+			5 : begin
+					GotoXY(1,5);
+					TextBackground(White);
+					TextColor(Black);
+					writeln('- ' + musiqueListe.tabListMus[1]);
+					TextBackground(Black);
+					TextColor(LightGray);
+					writeln('- ' + musiqueListe.tabListMus[2]);
+					writeln('- ' + musiqueListe.tabListMus[3]);
+				end;
+			6 : begin
+					GotoXY(1,5);
+					writeln('- ' + musiqueListe.tabListMus[1]);
+					TextBackground(White);
+					TextColor(Black);
+					writeln('- ' + musiqueListe.tabListMus[2]);
+					TextBackground(Black);
+					TextColor(LightGray);
+					writeln('- ' + musiqueListe.tabListMus[3]);
+				end;
+			7 : begin
+					GotoXY(1,5);
+					writeln('- ' + musiqueListe.tabListMus[1]);
+					writeln('- ' + musiqueListe.tabListMus[2]);
+					TextBackground(White);
+					TextColor(Black);
+					writeln('- ' + musiqueListe.tabListMus[3]);
+					TextBackground(Black);
+					TextColor(LightGray);
+				end;
+		end;
+		
+	until GetKeyEventCode(k) = 7181; 
+	
+	musique := musiqueListe.tabListMus[y - 4];
+		
 
+	
+	
 
-	sleep(2000);
+	writeln;
+	writeln;
+	writeln('Vous avez choisi la musique ', musique);
+	sleep(1000);
 	clrscr;
 	
 	
@@ -220,21 +413,21 @@ begin
 end;
 
 
-procedure nouvellePartie(var again : Boolean; player : Joueur);
+procedure nouvellePartie(var finPartie : Boolean; player : Joueur);
 var ouiNon : Char;
 begin
 writeln('Voulez-vous rejouer? o (oui) / n (non)');
 repeat
 readln(ouiNon);
 case ouiNon of 
-	'o' : again := True;
-	'n' : again := False;
+	'o' : finPartie := False;
+	'n' : finPartie := True;
 else writeln('Je n''ai pas compris...');
 end;
 
 until (ouiNon = 'o') or (ouiNon = 'n');
 
-if not(again) then
+if finPartie then
 	begin
 		writeln('Au revoir, ' + player.nom);
 	end;
