@@ -15,7 +15,7 @@ Interface
 uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, IGRTypes, IGRInterface, IGRSon, IGRScore;
 
 
-procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var finPartie : Boolean);
+procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var finPartie : Boolean; var sound : pMIX_MUSIC);
 procedure initTab(music : String; var tab : TabMusic);
 procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic; var score : Word);
 procedure verifTouche(var tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
@@ -25,11 +25,11 @@ procedure verifTouche(var tab : TabMusic; i : Word; deb : TDateTime; var score, 
 Implementation
 
 
-procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var finPartie : Boolean);
+procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var finPartie : Boolean; var sound : pMIX_MUSIC);
 var musique : String;
 	niveau : Word; 
 	tab : TabMusic;
-	sound: pMIX_MUSIC=NIL;
+	//sound: pMIX_MUSIC=NIL;
 	score : Word;
 	nbScores : Word;
 begin
@@ -37,14 +37,15 @@ begin
 	score := 0;
 	nbScores := 0;
 	
+	
 	difficulte(niveau, player);
 	choixMusique(niveau, musique);
 	afficherHighscores(musique, player, tabScores, nbScores);
 	
 	sleep(3000);
+	stopSon(sound);
 	clrscr;
 	
-	SDL_Init(SDL_INIT_AUDIO);
 
 	initTab(musique,tab);
 	afficherInterface;
@@ -60,8 +61,7 @@ begin
 
 	nouvellePartie(finPartie, player);
 	
-	MIX_FREEMUSIC(sound);
-	Mix_CloseAudio();
+	stopSon(sound);
 end;
 
 

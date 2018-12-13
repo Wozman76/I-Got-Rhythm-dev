@@ -11,7 +11,7 @@ unit IGRSon; {$MODE DELPHI}
 }
 
 Interface
-uses sdl, sdl_mixer_nosmpeg;
+uses sdl, sdl_mixer_nosmpeg, sysutils;
 
 CONST 	AUDIO_FREQUENCY:INTEGER=22050;
 		AUDIO_FORMAT:WORD=AUDIO_S16;
@@ -19,6 +19,7 @@ CONST 	AUDIO_FREQUENCY:INTEGER=22050;
 		AUDIO_CHUNKSIZE:INTEGER=4096;
 
 procedure son(var sound : pMIX_MUSIC; musique : String);
+procedure stopSon(var sound : pMIX_MUSIC);
 
 
 Implementation
@@ -31,10 +32,20 @@ begin
 	
     if MIX_OpenAudio(AUDIO_FREQUENCY, AUDIO_FORMAT,AUDIO_CHANNELS, 
 		AUDIO_CHUNKSIZE)<>0 then HALT;
+	
+
 	sound := MIX_LOADMUS(PChar('ressources/' + musique + '.mp3'));
+
 
     MIX_VolumeMusic(MIX_MAX_VOLUME);
     MIX_PlayMusic(sound, -1);
+end;
+
+
+procedure stopSon(var sound : pMIX_MUSIC);
+begin
+	MIX_FREEMUSIC(sound);
+	Mix_CloseAudio();
 end;
 
 

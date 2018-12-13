@@ -11,7 +11,7 @@ unit IGRInterface;
 
 
 Interface
-uses crt, sysutils, keyboard, IGRTypes;
+uses sdl, sdl_mixer_nosmpeg, crt, sysutils, keyboard, IGRTypes, IGRSon;
 
 procedure startScreen();
 procedure menu(var choixMenu : Word; player : Joueur);
@@ -21,7 +21,7 @@ procedure joueur(var player : Joueur);
 procedure afficherInterface();
 procedure nouvellePartie(var finPartie : Boolean; player : Joueur);
 procedure compteRebour();
-procedure credits();
+procedure credits(var sound : pMIX_MUSIC);
 
 
 Implementation
@@ -310,7 +310,7 @@ begin
 		k := GetKeyEvent;
 		case GetKeyEventCode(k) of
 			18432 : if (y > 5) then	y := y - 1;		
-			20480 : if (y < 7) then y := y + 1;
+			20480 : if (y < i + 4) then y := y + 1;
 		end;
 		
 		GotoXY(1,5);
@@ -426,7 +426,7 @@ end;
 
 
 
-procedure credits();
+procedure credits(var sound : pMIX_MUSIC);
 var fichier : Text;
 	tab : TabCredit;
 	i, j, k : Word;
@@ -435,15 +435,14 @@ begin
 
 	i := 1;
 	j := 1;
+	
+	stopSon(sound);
+	son(sound, 'Theme');
+	
 	arret := False;
 	assign(fichier, 'credits.txt');
 	
-{
-	clrscr;
-	writeln('------------------------------ I Got Rhythm -------------------------------');
-	
-	GotoXY(1,4);
-}
+
 	reset(fichier);
 	
 	while not(eof(fichier)) do
@@ -456,6 +455,7 @@ begin
 	
 	
 	repeat 
+	
 		clrscr;
 		GotoXY(1,1);
 		writeln('------------------------------ I Got Rhythm -------------------------------');

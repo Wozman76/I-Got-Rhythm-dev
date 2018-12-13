@@ -27,10 +27,13 @@ var niveau : Word;
 	finPartie : Boolean;
 	choixMenu : Word;
 	nbScores : Word;
+	sound : pMIX_MUSIC;
 
 BEGIN
-	finPartie := False;
 
+	finPartie := False;
+	SDL_Init(SDL_INIT_AUDIO);
+	son(sound, 'Invincible');
 	{$ifdef Unix}
 	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
 	{$endif}
@@ -46,7 +49,7 @@ BEGIN
 
 		
 		case choixMenu of
-			1 : lancementPartie(player, tabScores, finPartie);
+			1 : lancementPartie(player, tabScores, finPartie, sound);
 			2 : begin
 					difficulte(niveau, player);
 					choixMusique(niveau, musique);
@@ -61,13 +64,15 @@ BEGIN
 					clrscr;
 					
 				end;
-			3 : credits();
+			3 : credits(sound);
 		end;
 		
+		if not(choixMenu = 2) then
+			son(sound, 'Invincible');
 		
 	until finPartie;
 
-
+	stopSon(sound);
 	DoneKeyboard();
 
 
