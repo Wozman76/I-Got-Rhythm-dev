@@ -20,7 +20,7 @@ CONST 	AUDIO_FREQUENCY:INTEGER=22050;
 		AUDIO_CHANNELS:INTEGER=2;
 		AUDIO_CHUNKSIZE:INTEGER=4096;
 
-
+{procédure pour donner les paramètre du son et lance la musique}
 procedure son(var sound : pMIX_MUSIC; musique : String);
 
 begin

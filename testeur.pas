@@ -10,7 +10,7 @@ program testeur;
 }
 
 
-uses sdl, sdl_mixer_nosmpeg, crt, sysutils, keyboard,   {$ifdef Unix} unix {$endif}, IGRTypes, IGRInterface, IGRSon, IGRJeu, IGRScore;
+uses sdl, sdl_mixer_nosmpeg, crt, sysutils, keyboard,   {$ifdef Unix} unix, {$endif} IGRTypes, IGRInterface, IGRSon, IGRJeu, IGRScore;
 
 
 
@@ -32,13 +32,13 @@ BEGIN
 	finPartie := False;
 	
 	{$ifdef Unix}
-	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); ///enleve curseur
+	SysUtils.ExecuteProcess('/usr/bin/tput', 'civis', []); 				//enleve curseur
 	{$endif}
 	
 	InitKeyBoard();
 	
-	startScreen;
-	joueur(player);
+	startScreen;														//apparaître écran d'acceuil
+	joueur(player);														//entre nom joueur
 	repeat
 
 		
@@ -47,15 +47,15 @@ BEGIN
 
 		
 		case choixMenu of
-			1 : lancementPartie(player, tabScores, finPartie);
+			1 : lancementPartie(player, tabScores, finPartie);			//lance la partie si le choix etait 1
 			2 : begin
-					difficulte(niveau, player);
-					choixMusique(niveau, musique);
-					afficherHighscores(musique, player, tabScores);
+					difficulte(niveau, player);							//demande difficulté
+					choixMusique(niveau, musique);						//demande musique
+					afficherHighscores(musique, player, tabScores);		//affiche les 5 meilleurs scores
 					writeln;
 					writeln;
 					writeln('Appuyez sur [ESPACE] pour continuer...');
-	
+																		//tant qu'on appuis ps sur 'espace', le programme attend
 					while GetKeyEventChar(TranslateKeyEvent(GetKeyEvent())) <> ' ' do
 						sleep(10);
 				

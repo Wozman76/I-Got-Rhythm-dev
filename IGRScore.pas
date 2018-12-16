@@ -4,7 +4,7 @@ unit IGRScore;
     ____   ______      __     ____  __          __  __            
    /  _/  / ________  / /_   / __ \/ /_  __  __/ /_/ /_  ____ ___ 
    / /   / / __/ __ \/ __/  / /_/ / __ \/ / / / __/ __ \/ __ `__ \
- _/ /   / /_/ / /_/ / /_   / _, _/ / / / /_/ / /_/ / / / / / / / /
+ _/ /   / /_/ / /_/ / /_   / _, _/ / / / /_/ / /_/ / / / / / / / /    
 /___/   \____/\____/\__/  /_/ |_/_/ /_/\__, /\__/_/ /_/_/ /_/ /_/ 
                                       /____/                      
 }
@@ -22,7 +22,7 @@ Implementation
 
 
 
-
+{affiche le score du joueur}
 procedure afficherScore(score : Word);
 
 begin
@@ -31,6 +31,7 @@ writeln('Vous avez fait : ', score);
 end;
 
 
+{va chercher les données des scores dans le fichier de la musique et affiche les 5 meilleurs scores}
 procedure afficherHighscores(musique : String; var player : Joueur; var tabScores : HighScores);
 var fichier : File of Joueur;
 	j : Word;
@@ -38,7 +39,7 @@ var fichier : File of Joueur;
 	var nbScores : Integer;
 begin
 	nbScores := 0;
-	assign(fichier, musique + '_scores.dat');
+	assign(fichier, musique + '_scores.dat');							// prend fichier et s'il n'existe pas le crée
 	if not(FileExists(musique + '_scores.dat')) then
 	 
 		rewrite(fichier)
@@ -70,7 +71,7 @@ begin
 end;
 
 
-
+{ajoute le score du joueur dans le tableau des scores ordonnée decroissant en passant par un tableau temporaire}
 procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
 var i, j : Word;
 	tabTempScores : HighScores;
@@ -97,6 +98,7 @@ begin
 end;
 
 
+{enregistre le tableua des score dans le fichier en ne gardant que les 5 meilleurs scores}
 procedure stockageScore(player : Joueur; score : Word; var tabScores : Highscores; musique : String);
 var fichier : File of Joueur;
 	j, nbScores : Integer;
@@ -119,7 +121,7 @@ begin
 	reset(fichier);
 	
 
-	while not(eof(fichier)) do
+	while not(eof(fichier)) do											//trouve la taille du tableau
 		begin
 			nbScores := nbScores + 1;
 			read(fichier, playerFichier);
@@ -132,16 +134,16 @@ begin
 	
 
 		
-	ajoutScoreTableau(player, nbScores, tabScores);
+	ajoutScoreTableau(player, nbScores, tabScores);						//crée le nouveau tableau avec le score du joueur
 
 	
 	rewrite(fichier);
 	
-	if nbScores >= 5 then
+	if nbScores >= 5 then												// réduit taille du tableau a 5
 		nbScores := 4;
 		
 	for j := 1 to nbScores + 1 do
-		write(fichier, tabScores[j]);
+		write(fichier, tabScores[j]);									//écrit les score dans le fichier
 		
 		
 	close(fichier);

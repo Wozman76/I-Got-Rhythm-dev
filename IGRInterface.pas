@@ -26,6 +26,7 @@ procedure compteRebour();
 Implementation
 
 
+{affiche l'écran de lancement du jeu}
 procedure startScreen();
 var x, y : Word;
 begin
@@ -108,7 +109,7 @@ begin
 	writeln;
 	writeln('Appuyez sur [ESPACE] pour continuer...');
 	
-	while GetKeyEventChar(TranslateKeyEvent(GetKeyEvent())) <> ' ' do
+	while GetKeyEventChar(TranslateKeyEvent(GetKeyEvent())) <> ' ' do	//test si la touche entrée est 'espace'
 		sleep(10);
 
 	
@@ -117,7 +118,7 @@ end;
 
 
 
-{nom utilisateur}
+{demande nom d'utilisateur}
 procedure joueur (var player : Joueur);
 begin
 	clrscr;
@@ -131,7 +132,7 @@ begin
 end;
 
 
-
+{affiche le menu}
 procedure menu(var choixMenu : Word; player : Joueur);
 var y : Word;
 	k : TKeyEvent;
@@ -153,11 +154,11 @@ y := 5;
 repeat 
 	k := GetKeyEvent;
 	case GetKeyEventCode(k) of
-		18432 : if (y > 5) then	y := y - 1;		
-		20480 : if (y < 7) then y := y + 1;
+		18432 : if (y > 5) then	y := y - 1;								//test si fleche vers le haut et si pas deja en haut monte
+		20480 : if (y < 7) then y := y + 1;								//test si flèche vers le bas et si pas deja en bas descent
 	end;
 	
-	case y of 
+	case y of 															//change couleur de la ligne de la position et récrit normal les autres lignes
 		5 : begin
 				GotoXY(1,5);
 				TextBackground(White);
@@ -190,9 +191,9 @@ repeat
 			end;
 	end;
 	
-until GetKeyEventCode(k) = 7181; 
+until GetKeyEventCode(k) = 7181; 										//s'arrète lorsque la touche 'entrée' est présée
 
-choixMenu := y - 4;
+choixMenu := y - 4;														// récupère le numméro du choix pour savoir qu'elle procédure lancer
 
 
 
@@ -203,7 +204,7 @@ end;
 
 
 
-{choix de la difficultée}
+{choix de la difficultée même pricipe que pour le menu}
 procedure difficulte(var niveau : Word; player : Joueur);
 var y : Word;
 	k : TKeyEvent;
@@ -216,7 +217,7 @@ begin
 	writeln;
 	TextBackground(White);
 	TextColor(Black);
-	writeln('- facile');
+	writeln('- facile');												
 	TextBackground(Black);
 	TextColor(LightGray);
 	writeln('- moyen');
@@ -285,14 +286,14 @@ begin
 	clrscr;
 	
 	i := 0;
-	case niveau of 
+	case niveau of 														//en fonction de la difficulté charge le fichier correspondant
 		1 : assign(ficMusniv, 'listeFacile.txt');
 		2 : assign(ficMusniv, 'listeMedium.txt');
 		3 : assign(ficMusniv, 'listeDifficile.txt');
 	end;
 	reset(ficMusniv);
 	musiqueListe.nbMusiques := 0;
-	while not(eof(ficMusniv)) do
+	while not(eof(ficMusniv)) do										//lis le fichier et met lesnoms des musiques dans un tableau
 			begin
 			readln(ficMusniv, musTemp);
 			musiqueListe.nbMusiques := musiqueListe.nbMusiques + 1;
@@ -305,13 +306,13 @@ begin
 	writeln;
 	writeln('Quelle musique voulez-vous?');
 	writeln;
-	while not (eof(ficMusniv)) do
+	while not (eof(ficMusniv)) do										//affiche les noms des musique stockeés dans le tableau
 		begin
 			i := i + 1;
 			readln(ficMusniv, musiqueListe.tabListMus[i]);
 			if i = 1 then
 				begin
-					TextBackground(White);
+					TextBackground(White);								//affichage comme pour le menu
 					TextColor(Black);
 					writeln('- ' + musiqueListe.tabListMus[1]);
 					TextBackground(Black);
@@ -413,35 +414,38 @@ begin
 end;
 
 
+{demande si la personne veut rejouer etsi la personne ne veut pas rejouer le programme lui dit aurevoir}
 procedure nouvellePartie(var finPartie : Boolean; player : Joueur);
 var ouiNon : Char;
 begin
-writeln('Voulez-vous rejouer? o (oui) / n (non)');
-repeat
-readln(ouiNon);
-case ouiNon of 
-	'o' : finPartie := False;
-	'n' : finPartie := True;
-else writeln('Je n''ai pas compris...');
-end;
-
-until (ouiNon = 'o') or (ouiNon = 'n');
-
-if finPartie then
-	begin
-		writeln('Au revoir, ' + player.nom);
+	writeln('Voulez-vous rejouer? o (oui) / n (non)');
+	repeat
+	readln(ouiNon);
+	case ouiNon of 
+		'o' : finPartie := False;
+		'n' : finPartie := True;
+	else writeln('Je n''ai pas compris...');
 	end;
 
+	until (ouiNon = 'o') or (ouiNon = 'n');
+
+	if finPartie then
+		begin
+			writeln('Au revoir, ' + player.nom);
+		end;
+
 
 end;
 
+
+{affiche le compte a rebour avant le début de la partie}
 procedure compteRebour();
 var i, x, y : Word;
 begin
-	x := 38;
+	x := 38;															//positionne au milieu de la grille
 	y := 12;
 	sleep(1000);
-	for i := 3 downto 1 do
+	for i := 3 downto 1 do												//écrit 3 puis 2 et 1 avec une pose d'une seconde
 		begin
 			GotoXY(x,y);
 			write(i);
@@ -449,7 +453,7 @@ begin
 			GotoXY(x,y);
 			write(' ');
 		end;
-	GotoXY(1,1);
+	GotoXY(1,1);														//retourne en haut de la grille pour remettre l'orgine au bon endroit
 
 end;
 

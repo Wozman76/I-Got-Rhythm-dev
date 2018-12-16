@@ -25,7 +25,7 @@ Implementation
 
  ///peut etre a deplacer dans main
 
-
+{procédure pour donner les paramètre du son et lancer la musique}
 procedure son(var sound : pMIX_MUSIC; musique : String);
 
 begin
