@@ -14,8 +14,6 @@ Interface
 
 Const MAX = 200;
 
-Type Couleur = (orange, vert, rouge);
-
 Type Touche = record
 	key : Char;
 	posX, posY : Word;

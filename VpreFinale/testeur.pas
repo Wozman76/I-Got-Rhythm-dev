@@ -65,6 +65,11 @@ BEGIN
 					
 				end;
 			3 : credits(sound);
+			4 : begin
+					finPartie := True;
+					writeln;
+					writeln('Au revoir, ' + player.nom);
+				end;
 		end;
 		
 		if not(choixMenu = 2) then
@@ -77,5 +82,3 @@ BEGIN
 
 
 END.
-
-

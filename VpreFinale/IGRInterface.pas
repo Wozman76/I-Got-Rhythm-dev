@@ -20,7 +20,7 @@ procedure choixMusique(niveau : Word ; var musique : String);
 procedure joueur(var player : Joueur);
 procedure afficherInterface();
 procedure nouvellePartie(var finPartie : Boolean; player : Joueur);
-procedure compteRebour();
+procedure compteRebours();
 procedure credits(var sound : pMIX_MUSIC);
 
 
@@ -107,7 +107,7 @@ begin
 	GotoXY(x, y + 6);
 	writeln('                                      /____/                      ');
 	
-	sleep(2000);
+	sleep(2500);
 	
 	writeln;
 	writeln;
@@ -139,15 +139,17 @@ end;
 
 
 procedure menu(var choixMenu : Word; player : Joueur);
-var y, j : Word;
+var y, j, nbMenu : Word;
 	k : TKeyEvent;
 	tab : MenuDiffTab;
 begin
 
 	y := 5;
+	nbMenu := 4;
 	tab[1] := 'Jouer';
 	tab[2] := 'Highscores';
 	tab[3] := 'Crédits';
+	tab[4] := 'Quitter';
 	
 	clrscr;
 	writeln('------------------------------ I Got Rhythm -------------------------------');
@@ -159,8 +161,9 @@ begin
 	writeln('- ' + tab[1]);
 	TextBackground(Black);
 	TextColor(LightGray);
-	writeln('- ' + tab[2]);
-	writeln('- ' + tab[3]);
+	
+	for j := 2 to nbMenu do
+			writeln('- ' + tab[j]);
 	
 	
 	repeat 
@@ -168,12 +171,12 @@ begin
 		k := GetKeyEvent;
 		case GetKeyEventCode(k) of
 			18432 : if (y > 5) then	y := y - 1;		
-			20480 : if (y < 7) then y := y + 1;
+			20480 : if (y < 4 + nbMenu) then y := y + 1;
 		end;
 		
 		
 		GotoXY(1,5);
-			for j := 1 to 3 do
+			for j := 1 to nbMenu do
 				if j = y - 4 then
 					begin
 						TextBackground(White);
@@ -406,7 +409,7 @@ begin
 
 end;
 
-procedure compteRebour();
+procedure compteRebours();
 var i, x, y : Word;
 begin
 	x := 38;
@@ -464,10 +467,7 @@ begin
 		for k := j to j + 20 do
 			begin
 			if tab[k] = 'FIN' then
-				begin
-					arret := True;
-					break;
-				end
+					arret := True
 			else writeln(tab[k]);
 			end;
 	

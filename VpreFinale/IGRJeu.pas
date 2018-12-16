@@ -15,7 +15,7 @@ Interface
 uses sdl, sdl_mixer_nosmpeg, crt, sysutils, DateUtils, keyboard, IGRTypes, IGRInterface, IGRSon, IGRScore;
 
 
-procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var finPartie : Boolean; var sound : pMIX_MUSIC);
+procedure lancementPartie(player : Joueur; var tabScores : HighScores; var finPartie : Boolean; var sound : pMIX_MUSIC);
 procedure initTab(music : String; var tab : TabMusic);
 procedure partie(var sound : pMIX_MUSIC; musique : String; tab : TabMusic; var score : Word);
 procedure verifTouche(var tab : TabMusic; i : Word; deb : TDateTime; var score, compteur, b : Word);
@@ -25,11 +25,10 @@ procedure verifTouche(var tab : TabMusic; i : Word; deb : TDateTime; var score, 
 Implementation
 
 
-procedure lancementPartie(var player : Joueur; var tabScores : HighScores; var finPartie : Boolean; var sound : pMIX_MUSIC);
+procedure lancementPartie(player : Joueur; var tabScores : HighScores; var finPartie : Boolean; var sound : pMIX_MUSIC);
 var musique : String;
 	niveau : Word; 
 	tab : TabMusic;
-	//sound: pMIX_MUSIC=NIL;
 	score : Word;
 	nbScores : Word;
 begin
@@ -49,7 +48,7 @@ begin
 
 	initTab(musique,tab);
 	afficherInterface;
-	compteRebour();
+	compteRebours();
 	partie(sound, musique, tab, score);
 	sleep(2000);
 	clrscr;
@@ -161,7 +160,7 @@ begin
 						GotoXY(tab[i].posX, tab[i].posY);
 						if not(fin) then
 							write('-');
-						if (MilliSecondsBetween(Now, deb) > tab[i].temps) and (tab[i].appui = False) then
+						if (tab[i].appui = False) then
 							begin
 								compteur := 0;
 								b := 1;

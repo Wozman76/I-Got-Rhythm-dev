@@ -37,6 +37,15 @@ var fichier : File of Joueur;
 begin
 
 	nbScores := 0;
+	
+	
+	writeln('Liste des meilleurs scores :');
+	writeln;
+
+	writeln('Scores pour ' + musique +' :');
+	writeln;
+	
+	
 	assign(fichier, 'scores/' + musique + '_scores.dat');
 	if not(DirectoryExists('scores')) then
 		CreateDir('scores');
@@ -50,20 +59,16 @@ begin
 		begin
 			nbScores := nbScores + 1;
 			read(fichier, playerFichier);
-			tabScores[nbScores] := playerFichier;
+			writeln('- ', playerFichier.nom, ' : ', playerFichier.score);
 			
 		end;
 	close(fichier);
 	
 	
-	writeln('Liste des meilleurs scores :');
-	writeln;
 
-	writeln('Scores pour ' + musique +' :');
-	writeln;
 
 	for j := 1 to nbScores do
-		writeln('- ', tabScores[j].nom, ' : ', tabScores[j].score);
+		
 	writeln;
 	
 
@@ -71,7 +76,7 @@ end;
 
 
 
-procedure ajoutScoreTableau(player : Joueur; nbScores : Integer; var tabScores : HighScores);
+procedure ajoutScoreTableau(player : Joueur; nbScores : Word; var tabScores : HighScores);
 var i, j : Word;
 	tabTempScores : HighScores;
 begin
